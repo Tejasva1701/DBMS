@@ -1,0 +1,248 @@
+1. Query to display Employee Name, Job, Hire Date, Employee Number; for each employee with the Employee Number appearing first.
+SELECT Eno,Ename,Jop_type,Hire_date FROM EMPLOYEE;
+
+2. Query to display unique Jobs from the Employee Table.
+SELECT DISTINCT(Job_type) FROM EMPLOYEE;
+
+3. Query to display the Employee Name concatenated by a Job separated by a comma.
+SELECT concat(Ename,',',Job_type) AS Job_profile FROM EMPLOYEE;
+
+4. Query to display all the data from the Employee Table. Separate each Column by a comma and name the said column as THE_OUTPUT.
+SELECT concat(Eno,',',Ename,',',Job_type,',',SupervisionENO,',',Hire_date,',',Dno,',',Commission,',',Salary) AS THE_OUTPUT from EMPLOYEE;
+
+5. Query to display the Employee Name and Salary of all the employees earning more than $2850.
+SELECT Ename,Salary FROM EMPLOYEE
+WHERE Salary>2850;
+
+6. Query to display Employee Name and Department Number for the Employee No=79.
+SELECT Ename,Dno FROM EMPLOYEE
+WHERE Eno=79;
+
+7. Query to display Employee Name and Salary for all employees whose salary is not in the range of $1500 and $2850.
+SELECT Ename,Salary FROM EMPLOYEE
+WHERE Salary NOT BETWEEN 1500 and 2850;
+
+8. Query to display Employee Name and Department No. of all the employees in Dept 10 and Dept 30 in the alphabetical order by name.
+SELECT Ename,Dno FROM EMPLOYEE
+WHERE Dno=10 OR Dno=30
+ORDER BY Ename;
+
+9. Query to display Name and Hire Date of every Employee who was hired in 1981.
+SELECT Ename,Hire_date FROM EMPLOYEE
+WHERE Hire_date LIKE '1981%';
+
+10. Query to display Name and Job of all employees who have not assigned a supervisor.
+SELECT Ename,Job_type FROM EMPLOYEE
+WHERE SupervisionENO IS NULL;
+
+11. Query to display the Name, Salary and Commission for all the employees who earn commission.
+SELECT Ename,Salary,Commission FROM EMPLOYEE
+WHERE Commission>0;
+
+12. Sort the data in descending order of Salary and Commission.
+SELECT * FROM EMPLOYEE
+ORDER BY Salary,commission DESC;
+
+13. Query to display Name of all the employees where the third letter of their name is ‘A’.
+SELECT Ename FROM EMPLOYEE
+WHERE Ename LIKE '__a%';
+
+14. Query to display Name of all employees either have two ‘R’s or have two ‘A’s in their name and are either in Dept No = 30 or their Manger’s Employee No = 7788.
+SELECT Ename FROM EMPLOYEE
+WHERE (Ename LIKE '%a%a%' OR Ename LIKE '%r%r%') AND (Dno=30 OR SupervisionENO=7788);
+
+15. Query to display Name, Salary and Commission for all employees whose Commission amount is greater than their Salary increased by 5%.
+SELECT Ename,Salary,commission FROM EMPLOYEE
+WHERE commission>(Salary+(0.05*salary));
+
+16. Query to display the Current Date along with the day name.
+SELECT CURDATE(), DAYNAME(CURDATE()) as DAY_NAME;
+
+17. Query to display Name, Hire Date and Salary Review Date which is the 1st Monday after six months of employment.
+SELECT Ename, Hire_date, DATE_ADD(DATE_ADD(Hire_date, INTERVAL 6 MONTH), INTERVAL(7-WEEKDAY(DATE_ADD(Hire_date,INTERVAL 6 MONTH)))DAY)   AS Review_date FROM EMPLOYEE;
+
+18. Query to display Name and calculate the number of months between today and the date on which employee was hired of department ‘Purchase’.
+SELECT Ename, 12*(YEAR(CURDATE())-YEAR(Hire_date))+(MONTH(CURDATE())-MONTH(Hire_date)) AS Months FROM EMPLOYEE,DEPARTMENT
+WHERE Dname = 'Purchase';
+
+19. Query to display the following for each employee <E-Name> earns < Salary> monthly but wants < 3 * Current Salary >. Label the Column as Dream Salary.
+SELECT CONCAT(Ename,' earns ',Salary, ' monthly but wants ', 3*Salary) as DREAM_SALARY from EMPLOYEE;
+
+20. Query to display Name with the 1st letter capitalized and all other letter lower case and length of their name of all the employees whose name starts with ‘J’, ’A’ and ‘M’.
+SELECT CONCAT(UPPER(SUBSTRING(Ename,1,1)),LOWER(SUBSTRING(Ename,2,50))) AS NAME, LENGTH(Ename) AS LENGTH FROM EMPLOYEE
+WHERE Ename LIKE "J%" OR Ename LIKE "A%" OR Ename LIKE "M%";
+
+21. Query to display Name, Hire Date and Day of the week on which the employee started.
+SELECT Ename, Hire_date, DAYNAME(Hire_date) AS DAY_OF_THE_WEEK FROM EMPLOYEE;
+
+22. Query to display Name, Department Name and Department No for all the employees.
+SELECT EMPLOYEE.Ename, DEPARTMENT.Dname, DEPARTMENT.Dno FROM EMPLOYEE, DEPARTMENT
+WHERE EMPLOYEE.Dno = DEPARTMENT.Dno;
+
+23. Query to display Unique Listing of all Jobs that are in Department number 30.
+SELECT DISTINCT(Job_type) FROM EMPLOYEE
+WHERE Dno = 30;
+
+24. Query to display Name, Dept Name of all employees who have an ‘A’ in their name.
+SELECT EMPLOYEE.Ename, DEPARTMENT.Dname FROM EMPLOYEE, DEPARTMENT
+WHERE EMPLOYEE.Dno = DEPARTMENT.Dno AND EMPLOYEE.Ename LIKE "%A%";
+
+25. Query to display Name, Job, Department No. And Department Name for all the employees working at the Dallas location.
+SELECT EMPLOYEE.Ename, EMPLOYEE.Job_type, DEPARTMENT.Dno, DEPARTMENT.Dname FROM EMPLOYEE, DEPARTMENT
+WHERE EMPLOYEE.Dno = DEPARTMENT.Dno AND DEPARTMENT.Location = "Dallas";
+
+26. Query to display Name and Employee no. Along with their supervisor’s Name and the supervisor’s employee no; along with the Employees’ Name who do not have a supervisor.
+SELECT E1.Ename, E1.Eno, E2.Ename, E2.Eno FROM EMPLOYEE AS E1
+LEFT OUTER JOIN EMPLOYEE AS E2
+ON E1.Eno = E2.SupervisionENO;
+
+27. Query to display Name, Dept No. And Salary of any employee whose department No. and salary matches both the department no. And the salary of any employee who earns a commission.
+SELECT Ename, Dno, Salary FROM EMPLOYEE
+WHERE (Dno, Salary) IN (SELECT Dno, Salary FROM EMPLOYEE WHERE Commission > 0);
+
+28. Query to display Name and Salaries represented by asterisks, where each asterisk (*) signifies $100.
+SELECT Ename, REPEAT('*',(Salary/100)) AS SALARY_IN_ASTERISK FROM EMPLOYEE;
+
+29. Query to display the Highest, Lowest, Sum and Average Salaries of all the employees.
+SELECT MAX(Salary) AS HIGHEST_SALARY, MIN(Salary) AS LOWEST_SALARY, SUM(Salary) AS SALARY_SUM, AVG(Salary) AS AVERAGE_SALARY FROM EMPLOYEE;
+
+30. Query to display the number of employees performing the same Job type functions.
+SELECT Job_type, COUNT(*) AS NO_OF_EMPLOYEES FROM EMPLOYEE
+GROUP BY Job_type;
+
+31. Query to display the total number of supervisors without listing their names.
+SELECT COUNT(DISTINCT(SupervisionENO)) AS TOTAL_NO_OF_SUPERVISORS FROM EMPLOYEE;
+
+32. Query to display the Department Name, Location Name, No. of Employees and the average salary for all employees in that department.
+SELECT DEPARTMENT.Dname, DEPARTMENT.Location, COUNT(*) AS NO_OF_EMPLOYEES, AVG(EMPLOYEE.Salary) AS AVERAGE_SALARY FROM EMPLOYEE, DEPARTMENT
+WHERE DEPARTMENT.Dno = EMPLOYEE.Dno GROUP BY DEPARTMENT.Dno;
+
+33. Query to display Name and Hire Date for all employees in the same dept. as Blake.
+SELECT E1.Ename, E1.Hire_date FROM EMPLOYEE AS E1
+JOIN EMPLOYEE AS E2
+WHERE E1.Dno = E2.Dno && E2.Ename = 'Blake';
+
+34. Query to display the Employee No. And Name for all employees who earn more than the average salary.
+SELECT Eno, Ename FROM EMPLOYEE
+WHERE Salary > (SELECT AVG(Salary) FROM EMPLOYEE);
+
+35. Query to display Employee Number and Name for all employees who work in a department with any employee whose name contains a ‘T’.
+SELECT E1.Eno, E1.Ename FROM EMPLOYEE AS E1, EMPLOYEE AS E2
+WHERE E1.SupervisionENO = E2.Eno && E2.Ename LIKE "%T%";
+
+36. Query to display the names and salaries of all employees who report to supervisor named ‘King’.
+SELECT Ename, Salary FROM EMPLOYEE
+WHERE SupervisionENO = (SELECT Eno FROM EMPLOYEE WHERE Ename = "King");
+
+37. Query to display the department no, name and job for all employees in the Sales department.
+SELECT EMPLOYEE.Dno, EMPLOYEE.Ename, EMPLOYEE.Job_type FROM EMPLOYEE, DEPARTMENT
+WHERE EMPLOYEE.Dno = DEPARTMENT.Dno && DEPARTMENT.Dname = "Sales";
+
+38. Display names of employees along with their department name who have more than 20 years experience.
+SELECT EMPLOYEE.Ename, DEPARTMENT.Dname FROM EMPLOYEE, DEPARTMENT
+WHERE EMPLOYEE.Dno = DEPARTMENT.Dno && (YEAR(current_date()) - YEAR(Hire_date)) > 20;
+
+39. Display total number of departments at each location.
+SELECT Location, COUNT(*) AS NO_OF_DEPARTMENTS FROM DEPARTMENT
+GROUP BY Location;
+
+40. Find the department name in which at least 20 employees work in.
+SELECT DEPARTMENT.Dname FROM DEPARTMENT
+JOIN EMPLOYEE ON EMPLOYEE.Dno = DEPARTMENT.Dno GROUP BY DEPARTMENT.Dname HAVING COUNT(EMPLOYEE.Dno) >=20;
+
+41.Query to find the employee’ name who is not supervisor and name of supervisor supervising more than 5 employees.
+SELECT E1.Ename AS EMPLOYEE_NAME, E2.Ename AS SUPERVISOR_NAME FROM EMPLOYEE AS E1
+LEFT JOIN EMPLOYEE AS E2 ON E1.SupervisionENO = E2.Eno
+WHERE E1.SupervisionENO IS NOT NULL
+AND (SELECT COUNT(*) FROM EMPLOYEE AS E3 WHERE E3.SupervisionENO = E2.Eno) > 5;
+
+42. Query to display the job type with maximum and minimum employees.
+SELECT Job_type, COUNT(Job_type) as JOB_COUNT FROM EMPLOYEE
+GROUP BY Job_type
+HAVING JOB_COUNT = (SELECT MAX(JOB_COUNT) FROM (SELECT COUNT(Job_type) AS JOB_COUNT FROM EMPLOYEE GROUP BY Job_type) AS MAX_TABLE)
+OR JOB_COUNT = (SELECT MIN(JOB_COUNT) FROM (SELECT COUNT(Job_type) AS JOB_COUNT FROM EMPLOYEE GROUP BY Job_type) AS MIN_TABLE);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create table DEPARTMENT(
+    -> Dno       int  NOT NULL  PRIMARY KEY,
+    -> Dname     varchar(50) NULL,
+    -> Location  varchar(50)  NULL DEFAULT 'New Delhi');
+
+create table EMPLOYEE(
+Eno             char(3)  PRIMARY KEY  NOT NULL,
+Ename           varchar(50)  NOT NULL,
+Job_type        varchar(50)  NOT NULL,
+SupervisionENO  char(3) NULL,
+FOREIGN KEY(SupervisionENO)  REFERENCES  EMPLOYEE(Eno),
+Hire_date       date  NOT NULL,
+Dno             int NULL,
+FOREIGN KEY(Dno)  REFERENCES  DEPARTMENT(Dno),
+Commission      decimal(10,2) NULL,
+Salary          decimal(7,2)  NOT NULL);
+
+INSERT INTO DEPARTMENT VALUES
+(20,'Marketing','Dallas'),
+(30,'Technical','Bangalore'),
+(40,'Research & Development','New Delhi'),
+(50,'Accounts','Gujarat');
+
+
+INSERT INTO EMPLOYEE VALUES
+("63", "Rohan Gupta", "HR", "63", "1981-07-16", 20, 100.00, 2500.00),
+("64", "Ajay Prakash", "Manager", "64", "2016-10-23", 50, 86.00, 1750.00),
+("67", "Komal Singh", "Manager", "67", "1992-02-11", 10, 0.00, 950.00),
+("71", "Manoj Kumar", "HOD", "71", "2008-09-29", 40, 200.00, 3200.00),
+("74", "Abhishek Rao", "Clerk", "74", "2018-09-29", 20, 40.00, 750.00),
+("75", "Riya Rawal", "Content Writer", "75", "2017-03-16", 40, 150.00, 1300.00),
+("79", "Vineet Malik", "Sales Man", "79", "2013-01-14", 10, 80.00, 1050.00),
+("82", "Naveen Kumar", "Clerk", "82", "2019-08-27", 50, 0.00, 670.00),
+("83", "Gaurav Sharma", "HOD", "83", "2006-07-17", 30, 180.00, 2950.00),
+("87", "Namita Singh", "President", "NULL", "2016-05-25", 20, 250.00, 2850.00),
+("88", "Ayush Kumar", "Developer", "83", "2013-05-22", 30, 150.00, 1800.00),
+("90", "Karan Sethi", "C.A.", "64", "2008-10-01", 50, 200.00, 2100.00),
+("91", "Praveen", "Sales Man", "67", "2019-08-17", 10, 120.00, 1650.00),
+("93", "Chirag", "Social media coordinator", "87", "2017-03-11", 20, 100.00, 1900.00),
+("96", "Manav Bansal", "Executive", "63", "2021-04-12", 20, 100.00, 1670.00),
+("97", "Kavya", "Sales Man", "63", "2016-04-12", 20, 100.00, 1270.00),
+("99", "Raman", "SEO specialist", "87", "2012-11-17", 20, 150.00, 2500.00),
+("101", "Manish", "Executive", "63", "2016-04-12", 20, 100.00, 1800.00),
+("102", "Vranda Singh", "Executive", "63", "2016-04-12", 20, 100.00, 1800.00),
+("103", "Krish Gupta", "Executive", "93", "2016-04-12", 20, 100.00, 1800.00),
+("104", "Nischay", "Executive", "87", "2016-04-12", 20, 100.00, 1800.00),
+("105", "Himank", "Executive", "63", "2016-04-12", 20, 100.00, 1800.00),
+("107", "Aditya Agarwal", "Coordinator", "104", "2008-10-01", 20, 200.00, 2100.00),
+("108", "Lakshay", "Coordinator", "102", "2019-09-21", 20, 100.00, 1900.00),
+("110", "Ananya Rastogi", "SEO Specialist", "63", "2019-09-15", 20, 100.00, 1780.00),
+("113", "Yashi Kumari", "Coordinator", "105", "2019-09-21", 20, 100.00, 1900.00),
+("114", "Akshat Jain", "Coordinator", "101", "2019-09-21", 20, 100.00, 1900.00),
+("116", "Ankit Goyal", "Assistant", "63", "2019-09-27", 20, 100.00, 1900.00),
+("118", "Rishabh Bhat", "Assistant", "87", "2019-09-27", 20, 100.00, 1900.00),
+("120", "Aarushi", "Assistant", "110", "2019-09-27", 20, 100.00, 1900.00),
+("126", "Shivam Ahuja", "Assistant", "87", "2019-09-27", 20, 100.00, 1900.00),("127", "Vineet Garg", "Assistant", "103", "2019-09-27", 20, 100.00, 1900.00),
+("129", "Nikhil Kashyap", "Assistant", "63", "2018-08-27", 20, 100.00, 1900.00),
+("132", "Neha", "Developer", "83", "2017-03-11", 30, 100.00, 1900.00),
+("135", "Ishaan Chauhan", "Developer", "83", "2019-01-31", 30, 100.00, 1900.00);
